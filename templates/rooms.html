@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="section-title">Наши номера</h1>
+  <div class="room-grid">
+    {% for room in rooms %}
+      <div class="room-card">
+        <img src="{{ room.images[0].url if room.images else '/static/img/no-photo.png' }}" 
+             alt="Фото номера"
+             onclick="openRoomGallery({{ room.id }})"
+             style="cursor:pointer;">
+        <div class="room-info">
+          <h2>{{ room.name }}</h2>
+          <p>{{ room.description }}</p>
+          <div class="price">{{ room.price }} ₽/сутки</div>
+          <form oninput="calcTotal{{ room.id }}()">
+            <label>Заезд: <input type="date" id="checkin{{ room.id }}" required></label>
+            <label>Выезд: <input type="date" id="checkout{{ room.id }}" required></label>
+            <div>Стоимость: <span id="total{{ room.id }}">0</span> ₽</div>
+          </form>
+          <a href="/book/{{ room.id }}" class="book-button">Забронировать</a>
+        </div>
+      </div>
+      <script>
+        function calcTotal{{ room.id }}() {
+          const checkin = document.getElementById('checkin{{ room.id }}').value;
+          const checkout = document.getElementById('checkout{{ room.id }}').value;
+          if (checkin && checkout) {
+            const d1 = new Date(checkin);
+            const d2 = new Date(checkout);
+            const days = Math.max(1, Math.ceil((d2-d1)/86400000));
+            document.getElementById('total{{ room.id }}').innerText = days * {{ room.price }};
+          }
+        }
+      </script>
+    {% endfor %}
+  </div>
+
+  <!-- Модальное окно для галереи -->
+  <div id="room-modal" class="modal" onclick="closeRoomGallery()">
+    <span class="close" onclick="closeRoomGallery()">&times;</span>
+    <img id="room-modal-img" src="">
+    <div>
+      <button onclick="prevRoomImg(event)">&#8592;</button>
+      <button onclick="nextRoomImg(event)">&#8594;</button>
+    </div>
+  </div>
+
+  <script>
+    // roomImages = {room_id: [url1, url2, ...]}
+    const roomImages = {{ room_images_json|safe }};
+    let currentRoom = null;
+    let currentImg = 0;
+
+    function openRoomGallery(roomId) {
+      currentRoom = roomId;
+      currentImg = 0;
+      document.getElementById('room-modal').style.display = 'flex';
+      showRoomImg();
+    }
+    function closeRoomGallery() {
+      document.getElementById('room-modal').style.display = 'none';
+    }
+    function showRoomImg() {
+      const imgs = roomImages[currentRoom];
+      if (imgs && imgs.length > 0) {
+        document.getElementById('room-modal-img').src = imgs[currentImg];
+      }
+    }
+    function prevRoomImg(e) {
+      e.stopPropagation();
+      const imgs = roomImages[currentRoom];
+      currentImg = (currentImg - 1 + imgs.length) % imgs.length;
+      showRoomImg();
+    }
+    function nextRoomImg(e) {
+      e.stopPropagation();
+      const imgs = roomImages[currentRoom];
+      currentImg = (currentImg + 1) % imgs.length;
+      showRoomImg();
+    }
+  </script>
+{% endblock %}

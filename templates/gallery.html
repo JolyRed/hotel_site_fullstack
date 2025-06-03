@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Галерея</h1>
+
+  <div class="gallery">
+    {% for img in images %}
+      <img src="{{ img.url }}" alt="Фото {{ loop.index }}" class="gallery-photo" />
+    {% endfor %}
+  </div>
+
+  <div id="modal" class="modal" style="display:none;">
+    <span id="close">&times;</span>
+    <img id="modal-img" src="" alt="Увеличенное фото" />
+  </div>
+{% endblock %}

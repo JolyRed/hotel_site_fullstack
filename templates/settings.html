@@ -1,0 +1,17 @@
+<!-- filepath: c:\Users\Saguno\Desktop\hotel_site_2\templates\settings.html -->
+{% extends "base.html" %}
+{% block content %}
+<h2>Настройки пользователя</h2>
+<form method="post" action="/settings">
+  <label>Новая почта:</label>
+  <input type="email" name="email" value="{{ user.email }}" required>
+  <br>
+  <label>Новый пароль:</label>
+  <input type="password" name="password">
+  <br>
+  <button type="submit">Сохранить</button>
+</form>
+{% if success %}
+  <p style="color:green;">Настройки обновлены!</p>
+{% endif %}
+{% endblock %}

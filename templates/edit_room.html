@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Редактировать номер</h2>
+<form method="post" action="/admin/rooms/edit/{{ room.id }}">
+  <input name="name" value="{{ room.name }}" required>
+  <textarea name="description">{{ room.description }}</textarea>
+  <input name="price" type="number" value="{{ room.price }}" required>
+  <input name="capacity" type="number" value="{{ room.capacity }}">
+  <input name="amenities" value="{{ room.amenities }}">
+  <label>
+    <input type="checkbox" name="is_available" {% if room.is_available %}checked{% endif %}> Доступен
+  </label>
+  <button type="submit">Сохранить</button>
+</form>
+<h3>Фотографии номера</h3>
+<div class="room-slider">
+  {% for img in room.images %}
+    <div class="slide">
+      <img src="{{ img.url }}" alt="Фото номера">
+      <form method="post" action="/admin/rooms/{{ room.id }}/images/delete/{{ img.id }}">
+        <button type="submit">Удалить</button>
+      </form>
+    </div>
+  {% endfor %}
+</div>
+<form method="post" action="/admin/rooms/{{ room.id }}/images/add">
+  <input type="text" name="url" placeholder="URL фото" required>
+  <button type="submit">Добавить фото</button>
+</form>
+{% endblock %}

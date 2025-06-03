@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Отель Green Hills</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-container">
+      <a href="/" class="hotel-name">Green Hills</a>
+      <nav class="nav">
+        <a href="/">Главная</a>
+        <a href="/rooms">Номера</a>
+        <a href="/gallery">Галерея</a>
+        <a href="/about">О нас</a>
+        <a href="/feedback">Обратная связь</a>
+        {% if user %}
+          <div class="user-dropdown">
+            <button class="user-dropdown-btn">{{ user.username }} &#x25BC;</button>
+            <div class="user-dropdown-content">
+              {% if user.is_admin %}
+                <a href="/admin">Админка</a>
+                <a href="/admin/bookings">Заявки на бронирование</a>
+                <a href="/auth/logout">Выйти</a>
+              {% else %}
+                <a href="/my-bookings">Мои бронирования</a>
+                <a href="/settings">Настройки</a>
+                <a href="/auth/logout">Выйти</a>
+              {% endif %}
+            </div>
+          </div>
+        {% else %}
+          <a href="/auth/login">Войти</a>
+          <a href="/auth/register">Регистрация</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-info">
+        <h3>Контакты</h3>
+        <a href="tel:+79781234567">+7 (978) 123-45-67</a>
+        <a href="mailto:info@greenhills.com">info@greenhills.com</a>
+      </div>
+      <div class="footer-info">
+        <h3>Адрес</h3>
+        <p>Республика Крым, г. Алушта, ул. Набережная, 15</p>
+      </div>
+      <div class="footer-info">
+        <h3>Время работы</h3>
+        <p>Пн–Вс: 8:00 — 22:00</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Green Hills — Все права защищены</p>
+    </div>
+  </footer>
+  <script src="/static/js/gallery.js"></script>
+</body>
+</html>

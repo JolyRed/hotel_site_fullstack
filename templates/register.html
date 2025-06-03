@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Регистрация</h1>
+  {% if request.query_params.error == "invalid" %}
+    <div class="error">Неверный логин или пароль</div>
+  {% elif request.query_params.error == "exists" %}
+    <div class="error">Пользователь с таким логином или email уже существует</div>
+  {% elif request.query_params.registered %}
+    <div class="success">Регистрация успешна! Войдите в аккаунт.</div>
+  {% endif %}
+  <form method="post" action="/auth/register" class="register-form">
+    <label for="username">Логин</label>
+    <input type="text" name="username" required>
+    <label for="email">E-mail</label>
+    <input type="email" name="email" required>
+    <label for="password">Пароль</label>
+    <input type="password" name="password" required minlength="6">
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+  <p>Уже есть аккаунт? <a href="/auth/login">Войти</a></p>
+{% endblock %}

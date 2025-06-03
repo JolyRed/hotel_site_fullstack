@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Обратная связь</h1>
+
+  {% if request.query_params.success %}
+    <p class="success">Спасибо за вашу заявку! Мы свяжемся с вами.</p>
+  {% endif %}
+
+  {% if errors %}
+    <ul class="errors">
+      {% for error in errors %}
+        <li>{{ error['loc'][0] }}: {{ error['msg'] }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" action="/feedback" class="feedback-form">
+    <label for="fullname">ФИО</label>
+    <input id="fullname" type="text" name="fullname" required placeholder="Введите ваше имя и фамилию" />
+
+    <label for="phone">Телефон</label>
+    <input id="phone" type="text" name="phone" required placeholder="+7 (___) ___-__-__" />
+
+    <label for="email">Почта</label>
+    <input id="email" type="email" name="email" required placeholder="example@mail.com" />
+
+    <button type="submit">Отправить</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Мои бронирования</h2>
+{% if bookings and bookings|length > 0 %}
+<table class="bookings-table">
+  <tr>
+    <th>ID</th>
+    <th>Номер</th>
+    <th>Статус</th>
+    <th>Заезд</th>
+    <th>Выезд</th>
+    <th>Действия</th>
+  </tr>
+  {% for booking in bookings %}
+  <tr>
+    <td>{{ booking.id }}</td>
+    <td>{{ booking.room.name if booking.room else booking.room_id }}</td>
+    <td>{{ booking.status }}</td>
+    <td>{{ booking.check_in }}</td>
+    <td>{{ booking.check_out }}</td>
+    <td class="actions-cell">
+      {% if booking.status in ['pending', 'confirmed'] %}
+      <form method="post" action="/my-bookings/cancel/{{ booking.id }}">
+        <button type="submit" class="cancel-btn">Отменить</button>
+      </form>
+      {% else %}
+        -
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+  <p>У вас пока нет бронирований.</p>
+  <a href="/rooms" class="btn">Забронировать номер</a>
+{% endif %}
+{% endblock %}

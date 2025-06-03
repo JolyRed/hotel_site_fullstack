@@ -1,0 +1,20 @@
+<!-- filepath: c:\Users\Saguno\Desktop\hotel_site_2\templates\login.html -->
+{% extends "base.html" %}
+{% block content %}
+  <h1>Вход</h1>
+  {% if request.query_params.error == "invalid" %}
+    <div class="error">Неверный логин или пароль</div>
+  {% elif request.query_params.error == "exists" %}
+    <div class="error">Пользователь с таким логином или email уже существует</div>
+  {% elif request.query_params.registered %}
+    <div class="success">Регистрация успешна! Войдите в аккаунт.</div>
+  {% endif %}
+  <form method="post" action="/auth/login" class="login-form">
+    <label for="username">Логин</label>
+    <input type="text" name="username" required>
+    <label for="password">Пароль</label>
+    <input type="password" name="password" required>
+    <button type="submit">Войти</button>
+  </form>
+  <p>Нет аккаунта? <a href="/auth/register">Зарегистрироваться</a></p>
+{% endblock %}

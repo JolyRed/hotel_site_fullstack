@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Ожидающие подтверждения бронирования</h2>
+<table>
+  <tr>
+    <th>ID</th><th>Гость</th><th>Номер</th><th>Заезд</th><th>Выезд</th><th>Действия</th>
+  </tr>
+  {% for booking in bookings %}
+  <tr>
+    <td>{{ booking.id }}</td>
+    <td>{{ booking.fullname }}</td>
+    <td>{{ booking.room_id }}</td>
+    <td>{{ booking.check_in }}</td>
+    <td>{{ booking.check_out }}</td>
+    <td>
+      <form method="post" action="/admin/bookings/confirm/{{ booking.id }}">
+        <button type="submit">Подтвердить</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="admin-container">
+    <h1 class="section-title">Административная панель</h1>
+    <section class="admin-section">
+        <h2>Бронирования</h2>
+        <form method="get" action="/admin">
+          <select name="status">
+            <option value="">Только активные</option>
+            <option value="all" {% if request.query_params.status == 'all' %}selected{% endif %}>Все</option>
+          </select>
+          <button type="submit">Показать</button>
+        </form>
+        <table>
+            <tr>
+                <th>ID</th><th>Номер</th><th>Гость</th><th>Телефон</th><th>Email</th><th>Заезд</th><th>Выезд</th><th>Статус</th>
+            </tr>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.id }}</td>
+                <td>{{ booking.room.name if booking.room else booking.room_id }}</td>
+                <td>{{ booking.fullname }}</td>
+                <td>{{ booking.phone }}</td>
+                <td>{{ booking.email }}</td>
+                <td>{{ booking.check_in }}</td>
+                <td>{{ booking.check_out }}</td>
+                <td>
+                  <form method="post" action="/admin/bookings/status/{{ booking.id }}" style="display:inline;">
+                    <select name="status" onchange="this.form.submit()">
+                      <option value="pending" {% if booking.status == 'pending' %}selected{% endif %}>pending</option>
+                      <option value="confirmed" {% if booking.status == 'confirmed' %}selected{% endif %}>confirmed</option>
+                      <option value="cancelled" {% if booking.status == 'cancelled' %}selected{% endif %}>cancelled</option>
+                      <option value="completed" {% if booking.status == 'completed' %}selected{% endif %}>completed</option>
+                    </select>
+                  </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </section>
+
+    <section class="admin-section">
+        <h2>Добавить номер</h2>
+        <form method="post" action="/admin/rooms/add">
+            <input name="name" placeholder="Название" required>
+            <input name="description" placeholder="Описание">
+            <input name="price" type="number" placeholder="Цена" required>
+            <input name="image" placeholder="URL фото">
+            <input name="capacity" type="number" placeholder="Вместимость" value="1" min="1">
+            <input name="amenities" placeholder="Удобства">
+            <div class="admin-add-room-checkbox">
+                <label>
+                    <input type="checkbox" name="is_available"> Доступен
+                </label>
+            </div>
+            <div class="admin-add-room-actions">
+                <button type="submit">Добавить номер</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="admin-section">
+      <h2>Номера</h2>
+      <div class="room-grid">
+        {% for room in rooms %}
+          <div class="room-card">
+            <div class="room-slider">
+              {% for img in room.images %}
+                <div class="slide">
+                  <img src="{{ img.url }}" alt="Фото номера">
+                  <form method="post" action="/admin/rooms/{{ room.id }}/images/delete/{{ img.id }}">
+                    <button type="submit">Удалить</button>
+                  </form>
+                </div>
+              {% endfor %}
+            </div>
+            <form method="post" action="/admin/rooms/{{ room.id }}/images/add">
+              <input type="text" name="url" placeholder="URL фото" required>
+              <button type="submit">Добавить фото</button>
+            </form>
+            <h3>{{ room.name }}</h3>
+            <p>{{ room.description }}</p>
+            <div class="price">{{ room.price }} ₽</div>
+            <a href="/admin/rooms/edit/{{ room.id }}" class="edit-button">Редактировать</a>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="admin-section">
+        <h2>Галерея</h2>
+        <form method="post" action="/admin/gallery/add">
+            <input name="url" placeholder="URL фото" required>
+            <button type="submit">Добавить фото</button>
+        </form>
+        <div class="admin-gallery">
+            {% for img in images %}
+            <div class="admin-gallery-item">
+                <img src="{{ img.url }}" alt="" />
+                <form method="post" action="/admin/gallery/delete/{{ img.id }}">
+                    <button type="submit">Удалить</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

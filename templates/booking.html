@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Бронирование номера {{ room.name }}</h1>
+  
+  {% if error %}
+    <div class="error">{{ error }}</div>
+  {% endif %}
+  
+  {% if errors %}
+    <ul class="errors">
+      {% for error in errors %}
+        <li>{{ error['loc'][0] }}: {{ error['msg'] }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" action="/book" class="booking-form">
+    <input type="hidden" name="room_id" value="{{ room.id }}" />
+    
+    <label for="fullname">ФИО</label>
+    <input id="fullname" type="text" name="fullname" required placeholder="Введите ваше имя и фамилию" />
+    
+    <label for="phone">Телефон</label>
+    <input id="phone" type="text" name="phone" required placeholder="+7 (___) ___-__-__" />
+    
+    <label for="email">Email</label>
+    <input id="email" type="email" name="email" required placeholder="example@mail.com" />
+    
+    <div class="date-fields">
+      <div>
+        <label for="check_in">Дата заезда</label>
+        <input id="check_in" type="date" name="check_in" required min="{{ min_date }}" />
+      </div>
+      <div>
+        <label for="check_out">Дата выезда</label>
+        <input id="check_out" type="date" name="check_out" required min="{{ min_date }}" />
+      </div>
+    </div>
+    
+    <button type="submit">Забронировать</button>
+  </form>
+  
+  {% if booking_id %}
+    <div class="success-message">
+      <p>Спасибо за бронирование! Ваш номер будет забронирован под именем {{ user.fullname }}.</p>
+      <p>Детали бронирования:</p>
+      <ul>
+        <li>Номер: {{ room.name }}</li>
+        <li>Дата заезда: {{ booking.check_in }}</li>
+        <li>Дата выезда: {{ booking.check_out }}</li>
+        <li>Телефон: {{ user.phone }}</li>
+        <li>Email: {{ user.email }}</li>
+      </ul>
+      <p>Если у вас есть вопросы, пожалуйста, свяжитесь с нами по телефону или email.</p>
+    </div>
+  {% endif %}
+{% endblock %}

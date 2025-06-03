@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Добро пожаловать в Green Hills</h1>
+  <p class="hotel-description">
+    Green Hills — это уютный семейный отель, расположенный в живописном уголке Крыма. 
+    Мы предлагаем комфортные номера, великолепную природу вокруг и широкий спектр услуг 
+    для отдыха с семьей и друзьями. Наша территория оборудована всем необходимым для приятного и расслабляющего отдыха.
+  </p>
+
+  <div style="height: 50px;"></div> <!-- Отступ перед картой -->
+
+  <h2>Мы на карте</h2>
+  
+  <!-- Вставляем iframe с Google Maps -->
+  <iframe
+    src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3250.264614698021!2d33.243797709224395!3d45.16233724929579!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sru!2ses!4v1748097528606!5m2!1sru!2ses"
+    width="100%"
+    height="400"
+    style="border:0;"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+  ></iframe>
+  
+{% endblock %}
